@@ -1,0 +1,113 @@
+import mysql.connector
+
+MySQLdb = mysql.connector
+
+# 打开数据库连接
+db = MySQLdb.connect(
+    host='localhost',
+    user='root',
+    password='root',
+    database='testdb'
+)
+
+# 使用cursor()方法获取操作游标
+cursor = db.cursor()
+
+# 使用execute方法执行SQL语句
+cursor.execute("SELECT VERSION()")
+
+# 使用 fetchone() 方法获取一条数据
+data = cursor.fetchone()
+
+print("Database version : %s " % data)
+
+# 创建数据库表
+# 如果数据表已经存在使用 execute() 方法删除表。慎用,mysql workbench,如果views有以前的sql,会出现 tables/view could not be fetched
+# cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
+
+# 创建数据表SQL语句
+# sql = """CREATE TABLE EMPLOYEE (
+#          FIRST_NAME  CHAR(20) NOT NULL,
+#          LAST_NAME  CHAR(20),
+#          AGE INT,
+#          SEX CHAR(1),
+#          INCOME FLOAT )"""
+#
+# cursor.execute(sql)
+
+
+# # 数据库插入 用 %s 作为通用占位符是因为它可以接受任何类型的数据。
+# sql = "INSERT INTO EMPLOYEE (FIRST_NAME, LAST_NAME, AGE, SEX, INCOME) VALUES (%s, %s, %s, %s, %s)"
+# # # Data to be inserted
+# data = [
+#     ('ldf', 'abc', 22, 'M', float(100.00)),
+#     ('ldf1', 'abc1', 23, 'M', float(200.00)),
+#     ('ldf2', 'abc2', 24, 'M', float(3000.00)),
+# ]
+# #
+# try:
+#     # 执行sql语句
+#     cursor.executemany(sql, data)
+#     # 提交到数据库执行
+#     db.commit()
+# except Exception as e:
+#     # 打印错误信息
+#     print("An error occurred:", e)
+#     # Rollback in case there is any error
+#     db.rollback()
+
+
+# # 数据库查询
+# income = 1000
+# sql = "SELECT * FROM EMPLOYEE  WHERE INCOME > %s"
+#
+# try:
+#     # 执行SQL语句
+#     cursor.execute(sql, (income,))
+#     # 获取所有记录列表
+#     results = cursor.fetchall()
+#     for row in results:
+#         fname = row[0]
+#         lname = row[1]
+#         age = row[2]
+#         sex = row[3]
+#         income = row[4]
+#         # 打印结果
+#         print("fname=%s,lname=%s,age=%s,sex=%s,income=%s" % (fname, lname, age, sex, income))
+#
+# except:
+#     print("Error: unable to fetch data")
+
+
+# 数据库更新操作
+# sex = 'M'
+# sql = "UPDATE EMPLOYEE SET AGE = AGE + 1 WHERE SEX  = %s"
+# try:
+#     # 执行SQL语句，并传入参数
+#     cursor.execute(sql, (sex,))
+#     # 提交到数据库执行
+#     db.commit()
+# except Exception as e:
+#     # 打印错误信息
+#     print("An error occurred:", e)
+#     # 发生错误时回滚
+#     db.rollback()
+
+
+# # 删除
+# age=24
+# sql = "DELETE FROM EMPLOYEE WHERE AGE > %s"
+# try:
+#     # 执行SQL语句
+#     cursor.execute(sql,(age,))
+#     # 提交修改
+#     db.commit()
+# except Exception as e:
+#     # 打印错误信息
+#     print("An error occurred:", e)
+#     # 发生错误时回滚
+#     db.rollback()
+
+
+# 关闭数据库连接
+db.close()
